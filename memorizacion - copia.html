@@ -108,7 +108,7 @@
 
         inicializar() {
           btnEmpezar.classList.add('hide')
-          this.nivel = 3
+          this.nivel = 8
           this.colores = {
             celeste,
             violeta,
@@ -122,6 +122,7 @@
         }
 
         devolverColor(num) {
+          let color = undefined
           switch (this.secuencia[num]) {
               case 0:
                 return 'celeste'
@@ -133,35 +134,27 @@
                 return 'verde'
           }
         }
-        async iluminarColor(i) {
-          let color = this.devolverColor(i)
-          await new Promise((resolve, reject) => {
-            setTimeout(() => resolve (
-              this.colores[color].classList.add('light')), 300)
-          })
-          
-          return this.apagarColor( i )
-        }
-        async apagarColor(color) {
-          await new Promise((resolve, reject) => {
-            setTimeout(() => resolve(
-              this.colores[color].classList.remove('light')), 500)
-          })
-        }
         recibirEntradaUsuario() {
 
         }
-        async iluminarSecuencia() {
+        iluminarColor(color) {
+          color.classList.add('light')
+          setTimeout(() => this.apagarColor(color), 500)
+        }
+        apagarColor(color) {
+          color.classList.remove('light')
+        }
+        iluminarSecuencia() {
           for(let i = 0; i < this.nivel; i++) {
-            let prom = this.iluminarColor( i )
+            const color = this.colores[ this.devolverColor(i) ]
+            setTimeout(() => this.iluminarColor(color), 1000 * i)
           }
           this.recibirEntradaUsuario()
         }
         siguienteNivel() {
-          document.getElementById('nivel').innerHTML = 
+          document.getElementsByTagName('title').innerHTML = 
             'Nivel ' + this.nivel
           this.iluminarSecuencia()
-          this.nivel++
         }
       }
 
